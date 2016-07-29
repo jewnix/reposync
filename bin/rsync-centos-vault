@@ -1,0 +1,21 @@
+#!/bin/sh
+
+rsync="/usr/bin/rsync -avHz --delete"
+mirror=archive.kernel.org::archive/centos
+
+verlist="6.4 6.5 6.6"
+archlist="x86_64"
+baselist="os updates extras centosplus isos cloud xen4"
+local=/var/www/html/centos
+
+for ver in $verlist
+do
+  for arch in $archlist
+  do
+    for base in $baselist
+    do
+        remote=$mirror/$ver/$base/$arch/
+        $rsync $remote $local/$ver/$base/$arch/
+    done
+  done
+done
