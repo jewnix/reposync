@@ -1,0 +1,18 @@
+#!/bin/sh
+
+rsync="/usr/bin/rsync -avHz --progress --delete --exclude SRPMS --no-o --no-g"
+mirror=rsync://rsync.gtlib.gatech.edu/oVirt/pub
+
+verlist="el7"
+baselist="ovirt-3.6 ovirt-3.6-pre ovirt-3.6-snapshot"
+#baselist="ovirt-3.6"
+local=/var/www/html/ovirt
+
+for ver in $verlist
+do
+  for base in $baselist
+  do
+      remote=$mirror/$base/rpm/$ver/
+      $rsync $remote $local/$base/
+  done
+done
