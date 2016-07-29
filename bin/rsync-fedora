@@ -1,0 +1,52 @@
+#!/bin/sh
+
+rsync="/usr/bin/rsync -auvHz --delete"
+mirror=mirrors.rit.edu::fedora
+
+verlist="22 23"
+verlist_testing="22 23 24"
+archlist="x86_64"
+baselist="releases"
+catagory="Everything"
+local=/var/www/html/fedora
+
+for ver in $verlist
+do
+  for arch in $archlist
+  do
+    for base in $baselist
+    do
+      for cat in $catagory
+      do
+        remote=$mirror/$base/$ver/$cat/$arch/os/
+	echo "syncing $remote to $local/$base/$ver/$cat/$arch"
+        $rsync $remote $local/$base/$ver/$cat/$arch
+      done
+    done
+  done
+done
+
+for ver in $verlist
+do
+  for arch in $archlist
+  do
+    for cat in $catagory
+    do
+      remote=$mirror/updates/$ver/$arch/
+      target=$local/updates/$ver/$arch
+      echo "syncing $remote to $target"
+      $rsync $remote $target
+    done
+  done
+done
+
+for ver in $verlist_tesing
+do
+  for arch in $archlist
+  do
+    remote=$mirror/updates/testing/$ver/$arch/
+    target=$local/updates/testing/$ver/$arch
+    echo "syncing $remote to $target"
+    $rsync $remote $target
+  done
+done
