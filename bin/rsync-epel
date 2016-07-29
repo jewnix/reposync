@@ -1,0 +1,17 @@
+#!/bin/sh
+
+rsync="/usr/bin/rsync -avuHz --delete"
+mirror=mirrors.rit.edu::epel
+
+verlist="6 7"
+archlist="x86_64 i386 SRPMS"
+local=/var/www/html/epel
+
+for ver in $verlist
+do
+  for arch in $archlist
+  do
+        remote=$mirror/$ver/$arch/
+        $rsync $remote $local/$ver/$arch/
+  done
+done
