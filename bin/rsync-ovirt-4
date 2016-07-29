@@ -1,0 +1,43 @@
+#!/bin/sh
+
+rsync="/usr/bin/rsync -avHz --progress --delete --exclude SRPMS --no-o --no-g"
+mirror=rsync://rsync.gtlib.gatech.edu/oVirt/pub
+
+verlist="el7"
+
+# Stable Version
+baselist="ovirt-4.0"
+local=/var/www/html/ovirt-4
+
+for ver in $verlist
+do
+  for base in $baselist
+  do
+      remote=$mirror/$base/rpm/$ver/
+      $rsync $remote $local/$base/
+  done
+done
+
+# Pre-Release Version
+local=/var/www/html/ovirt-4/pre
+baselist="ovirt-4.0-pre"
+for ver in $verlist
+do
+  for base in $baselist
+  do
+      remote=$mirror/$base/rpm/$ver/
+      $rsync $remote $local/$base/
+  done
+done
+
+# Snapshot Version
+local=/var/www/html/ovirt-4/snapshot
+baselist="ovirt-4.0-snapshot ovirt-4.0-snapshot-static"
+for ver in $verlist
+do
+  for base in $baselist
+  do
+      remote=$mirror/$base/rpm/$ver/
+      $rsync $remote $local/$base/
+  done
+done
